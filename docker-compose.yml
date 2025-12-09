@@ -1,0 +1,97 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  postgres:
+    image: postgres:15-alpine
+    container_name: coopcredit-postgres
+    environment:
+      POSTGRES_DB: coopcredit_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+    ports:
+      - "5432:5432"
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    networks:
+      - coopcredit-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Risk Central Mock Service
+  risk-central:
+    build:
+      context: ./risk-central-mock-service
+      dockerfile: Dockerfile
+    container_name: coopcredit-risk-central
+    ports:
+      - "8081:8081"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+    networks:
+      - coopcredit-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Credit Application Service
+  credit-application:
+    build:
+      context: ./credit-application-service
+      dockerfile: Dockerfile
+    container_name: coopcredit-credit-application
+    ports:
+      - "8080:8080"
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DATABASE_URL: jdbc:postgresql://postgres:5432/coopcredit_db
+      DATABASE_USERNAME: postgres
+      DATABASE_PASSWORD: postgres
+      RISK_CENTRAL_URL: http://risk-central:8081
+    depends_on:
+      postgres:
+        condition: service_healthy
+      risk-central:
+        condition: service_healthy
+    networks:
+      - coopcredit-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 90s
+
+networks:
+  coopcredit-network:
+    driver: bridge
+
+volumes:
+  postgres_data:
+```
+
+---
+
+## **Paso 12: .dockerignore (para ambos proyectos)**
+
+Crea este archivo en ambos proyectos (`credit-application-service` y `risk-central-mock-service`):
+
+#### **📄 `.dockerignore`**
+```
+target/
+!target/*.jar
+.mvn/
+mvnw
+mvnw.cmd
+*.md
+.git
+.gitignore
+.idea
+*.iml
+.vscode
