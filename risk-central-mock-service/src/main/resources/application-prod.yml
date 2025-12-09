@@ -1,0 +1,7 @@
+server:
+  port: ${PORT:8081}
+
+logging:
+  level:
+    root: WARN
+    com.coopcredit: INFO
