@@ -1,30 +1,46 @@
 package com.coopcredit.risk_central_mock_service.controller;
 
 
+
 import com.coopcredit.risk_central_mock_service.dto.RiskEvaluationRequestDTO;
 import com.coopcredit.risk_central_mock_service.dto.RiskEvaluationResponseDTO;
 import com.coopcredit.risk_central_mock_service.service.RiskEvaluationService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.media.Content;
+import io.swagger.v3.oas.annotations.media.Schema;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-        import java.util.HashMap;
+import java.util.HashMap;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/api/risk-evaluation")
 @RequiredArgsConstructor
 @Slf4j
+@Tag(name = "Risk Evaluation", description = "Credit risk evaluation endpoints")
 public class RiskEvaluationController {
 
     private final RiskEvaluationService riskEvaluationService;
 
-    /**
-     * Main endpoint for risk evaluation
-     * POST /api/risk-evaluation
-     */
+    @Operation(
+            summary = "Evaluate credit risk",
+            description = "Evaluate credit risk based on document number. Returns consistent score for same document."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Risk evaluation completed successfully",
+                    content = @Content(schema = @Schema(implementation = RiskEvaluationResponseDTO.class))
+            ),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PostMapping
     public ResponseEntity<RiskEvaluationResponseDTO> evaluateRisk(
             @Valid @RequestBody RiskEvaluationRequestDTO request) {
@@ -36,10 +52,18 @@ public class RiskEvaluationController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Endpoint with scenario-based evaluation (useful for testing)
-     * POST /api/risk-evaluation/scenarios
-     */
+    @Operation(
+            summary = "Evaluate with test scenarios",
+            description = "Evaluate credit risk with predefined test scenarios. Use documents starting with 999, 888, 777, or 666 for specific scores."
+    )
+    @ApiResponses(value = {
+            @ApiResponse(
+                    responseCode = "200",
+                    description = "Risk evaluation completed successfully",
+                    content = @Content(schema = @Schema(implementation = RiskEvaluationResponseDTO.class))
+            ),
+            @ApiResponse(responseCode = "400", description = "Invalid input data")
+    })
     @PostMapping("/scenarios")
     public ResponseEntity<RiskEvaluationResponseDTO> evaluateRiskWithScenarios(
             @Valid @RequestBody RiskEvaluationRequestDTO request) {
@@ -53,10 +77,11 @@ public class RiskEvaluationController {
         return ResponseEntity.ok(response);
     }
 
-    /**
-     * Health check endpoint
-     * GET /api/risk-evaluation/health
-     */
+    @Operation(
+            summary = "Health check",
+            description = "Check if the service is running"
+    )
+    @ApiResponse(responseCode = "200", description = "Service is healthy")
     @GetMapping("/health")
     public ResponseEntity<Map<String, String>> health() {
         Map<String, String> health = new HashMap<>();
@@ -67,28 +92,12 @@ public class RiskEvaluationController {
         return ResponseEntity.ok(health);
     }
 
-    /**
-     * Info endpoint with testing scenarios
-     * GET /api/risk-evaluation/info
-     */
+    @Operation(
+            summary = "Service information",
+            description = "Get service information and available test scenarios"
+    )
+    @ApiResponse(responseCode = "200", description = "Service information retrieved")
     @GetMapping("/info")
     public ResponseEntity<Map<String, Object>> info() {
         Map<String, Object> info = new HashMap<>();
-        info.put("service", "Risk Central Mock Service");
-        info.put("description", "Mock service for credit risk evaluation");
-        info.put("version", "1.0.0");
-
-        Map<String, String> scenarios = new HashMap<>();
-        scenarios.put("999*", "Excellent credit (score ~800)");
-        scenarios.put("888*", "Good credit (score ~700)");
-        scenarios.put("777*", "Poor credit (score ~500)");
-        scenarios.put("666*", "Very poor credit (score ~350)");
-        scenarios.put("others", "Random score based on document hash");
-
-        info.put("testingScenarios", scenarios);
-        info.put("endpoint", "POST /api/risk-evaluation");
-        info.put("scenariosEndpoint", "POST /api/risk-evaluation/scenarios");
-
-        return ResponseEntity.ok(info);
-    }
-}
+        info.put("
