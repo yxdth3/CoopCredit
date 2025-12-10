@@ -16,7 +16,7 @@ services:
     networks:
       - coopcredit-network
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: [ "CMD-SHELL", "pg_isready -U postgres" ]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -34,7 +34,7 @@ services:
     networks:
       - coopcredit-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8081/actuator/health" ]
       interval: 30s
       timeout: 10s
       retries: 3
@@ -43,7 +43,7 @@ services:
   # Credit Application Service
   credit-application:
     build:
-      context: ./credit-application-service
+      context: ./credit-application
       dockerfile: Dockerfile
     container_name: coopcredit-credit-application
     ports:
@@ -62,7 +62,7 @@ services:
     networks:
       - coopcredit-network
     healthcheck:
-      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health"]
+      test: [ "CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:8080/actuator/health" ]
       interval: 30s
       timeout: 10s
       retries: 5
@@ -74,24 +74,3 @@ networks:
 
 volumes:
   postgres_data:
-```
-
----
-
-## **Paso 12: .dockerignore (para ambos proyectos)**
-
-Crea este archivo en ambos proyectos (`credit-application-service` y `risk-central-mock-service`):
-
-#### **📄 `.dockerignore`**
-```
-target/
-!target/*.jar
-.mvn/
-mvnw
-mvnw.cmd
-*.md
-.git
-.gitignore
-.idea
-*.iml
-.vscode
