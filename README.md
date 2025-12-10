@@ -1,190 +1,208 @@
-# CoopCredit
-CoopCredit, a savings and credit cooperative with branches in several cities across the country, currently manages the loan application and evaluation process efficiently, providing:
+# CoopCredit - Sistema de Gestión de Créditos Cooperativos
 
-• Credit histories.
+Sistema de microservicios para gestión de solicitudes de crédito con evaluación de riesgo integrada.
 
-• Fast application approval.
+## 🏗️ Arquitectura
 
-• Risk assessments.
+- **credit-application**: Microservicio principal para gestión de afiliados y solicitudes de crédito
+- **risk-central-mock-service**: Servicio de evaluación de riesgo crediticio
+- **PostgreSQL**: Base de datos principal
 
-• Rapid credit reviews.
+## 🚀 Tecnologías
 
-• Secure authentication and access control.
+- **Java 21** (credit-application)
+- **Java 17** (risk-central-mock-service)
+- **Spring Boot 3.2.5**
+- **Docker & Docker Compose**
+- **PostgreSQL 15**
+- **Flyway** (migraciones de BD)
+- **MapStruct** (mapeo de objetos)
+- **JWT** (autenticación)
+- **Swagger/OpenAPI** (documentación API)
 
-• Effective error handling and validation.
+## 📋 Requisitos Previos
 
-CoopCredit's management has built a comprehensive, modular, secure, scalable, and professionally designed hexagonal loan application system that allows it to operate effectively in real-world environments.
+- Docker y Docker Compose instalados
+- Puertos disponibles: 5432 (PostgreSQL), 8080 (credit-application), 8081 (risk-central)
 
-## Project structure
-```
-coopcredit-system/
-├── credit-application-service/
-│   ├── src/main/java/.../domain
-│   ├── src/main/java/.../application
-│   ├── src/main/java/.../infrastructure
-│   ├── src/main/resources/db/migration
-│   ├── Dockerfile
-│   └── pom.xml
-│
-├── risk-central-mock-service/
-│   ├── controller/
-│   ├── dto/
-│   ├── service/
-│   ├── Dockerfile
-│   └── pom.xml
-│
-├── docker-compose.yml
-├── start.sh
-├── start.bat
-└── README.md
+## 🔧 Instalación y Ejecución
+
+### 1. Clonar el repositorio
+```bash
+git clone git@github.com:yxdth3/CoopCredit.git
+cd CoopCredit
 ```
 
-## Architecture
-```
-┌─────────────────────────────────────────────────────────────┐
-│                    INFRASTRUCTURE LAYER                      │
-│  ┌──────────────┐              ┌────────────────────────┐   │
-│  │ REST API     │              │  Database (JPA)        │   │
-│  │ Controllers  │              │  PostgreSQL            │   │
-│  └──────┬───────┘              └────────┬───────────────┘   │
-│         │                               │                    │
-│         │ Input Adapters                │ Output Adapters    │
-└─────────┼───────────────────────────────┼────────────────────┘
-          │                               │
-┌─────────▼───────────────────────────────▼────────────────────┐
-│                    APPLICATION LAYER                          │
-│         DTOs, Mappers, Security Services                      │
-└───────────────────────────┬───────────────────────────────────┘
-                            │
-┌───────────────────────────▼───────────────────────────────────┐
-│                       DOMAIN LAYER                            │
-│  ┌────────────┐  ┌──────────────┐  ┌───────────────────┐    │
-│  │  Entities  │  │  Use Cases   │  │  Ports            │    │
-│  └────────────┘  └──────────────┘  └───────────────────┘    │
-│         Pure Java - No Framework Dependencies                │
-└──────────────────────────────────────────────────────────────┘
-```
-Risk central mock 
+### 2. Construir y levantar los servicios
+```bash
+docker-compose build
+docker-compose up -d
 ```
 
-
-┌──────────────────────┐         ┌─────────────────────────┐
-│  Credit Application  │◄───────►│   Risk Central Mock     │
-│  Service (8080)      │  HTTP   │   Service (8081)        │
-│                      │  REST   │                         │
-└──────────┬───────────┘         └─────────────────────────┘
-           │
-           ▼
-      PostgreSQL DB
+### 3. Verificar estado
+```bash
+docker-compose ps
 ```
 
-## Technologies
-### Backend
+Deberías ver 3 contenedores corriendo:
+- `coopcredit-postgres` (healthy)
+- `coopcredit-risk-central` (healthy)
+- `coopcredit-credit-application` (healthy)
 
-Java 17
-Spring Boot
-Web
-JPA
-Security
-Validation
-Actuator
-Hibernate
-Flyway
+## 📡 Acceso a los Servicios
 
-### Security
+### Swagger UI
+- **Credit Application**: http://localhost:8080/swagger-ui.html
+- **Risk Central**: http://localhost:8081/swagger-ui.html
 
-JWT
-BCrypt
-RBAC
+### Health Checks
+- **Credit Application**: http://localhost:8080/actuator/health
+- **Risk Central**: http://localhost:8081/actuator/health
 
-### Database
+## 🔐 Autenticación
 
-PostgreSQL 
+### Registrar Usuario
+```bash
+POST http://localhost:8080/api/auth/register
+Content-Type: application/json
 
-### Libraries
-
-Lombok
-MapStruct
-Micrometer
-
-### Testing
-
-JUnit 5
-Mockito
-Testcontainers
-
-### DevOps
-
-Docker
-Docker Compose
-Maven
-
-## Quick start
-1. Clone the repo:
-   ```
-   git clone https://github.com/yxdth3/CoopCredit
-   cd coopcredit-system
-   ```
-3. Start services:
-   ```
-   chmod +x start.sh
-   ./start.sh
-   ```
-5. Access:
-   ```
-   API: http://localhost:8080
-   Risk Central: http://localhost:8081
-   Health: http://localhost:8080/actuator/health
-   ```
-
-## API Documentation
-
-### Authentication
-
-* Register -> POST /api/auth/register
-* Login -> POST /api/auth/login
-
-### Affiliates
-
-* Create Affiliate ->  POST /api/affiliates
-* Get by ID -> GET /api/affiliates/{id}
-* List all -> GET /api/affiliates
-
-### Credict application
-
-* Create -> POST /api/credit-applications
-* Evaluate -> POST /api/credit-applications/{id}/evaluate
-* Get pending -> GET /api/credit-applications/pending
-* Risk central mock ->  POST http://localhost:8081/api/risk-evaluation
-
-## Testing
-Run tests: mvn test
-Integration: mvn verify
-Testcontainers: mvn test -Dspring.profiles.active=test
-
-
-## Docker deployment
-* Build: docker-compose build
-* Run: docker-compose up -d
-* Logs: docker-compose logs -f
-* Stop: docker-compose down
-
-## Roles and permisions
+{
+  "username": "admin",
+  "password": "admin123",
+  "email": "admin@coopcredit.com",
+  "roles": ["ADMIN"]
+}
 ```
 
-| Role     | Permissions                     |
-| -------- | ------------------------------- |
-| ADMIN    | Full access                     |
-| ANALISTA | Manage affiliates & evaluations |
-| AFILIADO | Own data + create applications  |
+### Login
+```bash
+POST http://localhost:8080/api/auth/login
+Content-Type: application/json
+
+{
+  "username": "admin",
+  "password": "admin123"
+}
 ```
 
-## Default users
+**Respuesta:** Token JWT para usar en las demás peticiones
+
+## 📊 Ejemplos de Uso
+
+### Crear Afiliado
+```bash
+POST http://localhost:8080/api/affiliates
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "document": "1234567890",
+  "name": "Juan",
+  "lastName": "Pérez",
+  "email": "juan@example.com",
+  "phoneNumber": "3001234567",
+  "monthlyIncome": 5000000
+}
 ```
 
-| Username  | Password | Roles           |
-| --------- | -------- | --------------- |
-| admin     | admin123 | ADMIN, ANALISTA |
-| analyst   | admin123 | ANALISTA        |
-| affiliate | admin123 | AFILIADO        |
+### Crear Solicitud de Crédito
+```bash
+POST http://localhost:8080/api/credit-applications
+Authorization: Bearer {token}
+Content-Type: application/json
+
+{
+  "affiliateId": 1,
+  "requestedAmount": 5000000,
+  "termMonths": 36,
+  "purpose": "Vivienda"
+}
 ```
+
+**Límites de validación:**
+- Monto mínimo: $1,000,000
+- Monto máximo: $9,000,000
+- Plazo: 12-60 meses
+
+### Evaluar Riesgo
+```bash
+POST http://localhost:8081/api/risk-evaluation
+Content-Type: application/json
+
+{
+  "document": "1234567890"
+}
+```
+
+## 🗃️ Base de Datos
+
+Las migraciones de Flyway se ejecutan automáticamente al iniciar:
+- `V1__create_schema.sql` - Creación de tablas
+- `V2__create_indexes.sql` - Índices para optimización
+- `V3__insert_initial_data.sql` - Datos iniciales
+
+## 🛠️ Desarrollo
+
+### Reconstruir un servicio específico
+```bash
+docker-compose build --no-cache credit-application
+docker-compose up -d credit-application
+```
+
+### Ver logs
+```bash
+docker-compose logs -f credit-application
+docker-compose logs -f risk-central
+```
+
+### Detener servicios
+```bash
+docker-compose down
+```
+
+### Detener y eliminar volúmenes
+```bash
+docker-compose down -v
+```
+
+## 📝 Variables de Entorno
+
+Las variables se configuran en `docker-compose.yml`:
+
+### Credit Application
+- `SPRING_PROFILES_ACTIVE=prod`
+- `DATABASE_URL=jdbc:postgresql://postgres:5432/coopcredit_db`
+- `DATABASE_USERNAME=postgres`
+- `DATABASE_PASSWORD=postgres`
+- `RISK_CENTRAL_URL=http://risk-central:8081`
+
+## 🏛️ Arquitectura Hexagonal
+
+El proyecto sigue Clean Architecture con:
+- **Domain**: Modelos de negocio y casos de uso
+- **Application**: Servicios de aplicación y DTOs
+- **Infrastructure**: Adaptadores (REST, JPA, etc.)
+
+## 🧪 Testing
+
+Ejecutar tests:
+```bash
+cd credit-application
+mvn test
+```
+
+## 📄 Licencia
+
+Este proyecto es parte de un sistema educativo/demostrativo.
+
+## 👥 Autor
+
+**yxdth3** - [GitHub](https://github.com/yxdth3)
+
+## 🤝 Contribuciones
+
+Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios propuestos.
+
+---
+
+**Estado del Proyecto**: ✅ Funcional y desplegable con Docker
