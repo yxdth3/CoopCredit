@@ -2,13 +2,13 @@
 
 Sistema de microservicios para gestión de solicitudes de crédito con evaluación de riesgo integrada.
 
-## 🏗️ Arquitectura
+##  Arquitectura
 
 - **credit-application**: Microservicio principal para gestión de afiliados y solicitudes de crédito
 - **risk-central-mock-service**: Servicio de evaluación de riesgo crediticio
 - **PostgreSQL**: Base de datos principal
 
-## 🚀 Tecnologías
+##  Tecnologías
 
 - **Java 21** (credit-application)
 - **Java 17** (risk-central-mock-service)
@@ -20,12 +20,12 @@ Sistema de microservicios para gestión de solicitudes de crédito con evaluaci�
 - **JWT** (autenticación)
 - **Swagger/OpenAPI** (documentación API)
 
-## 📋 Requisitos Previos
+##  Requisitos Previos
 
 - Docker y Docker Compose instalados
 - Puertos disponibles: 5432 (PostgreSQL), 8080 (credit-application), 8081 (risk-central)
 
-## 🔧 Instalación y Ejecución
+##  Instalación y Ejecución
 
 ### 1. Clonar el repositorio
 ```bash
@@ -59,7 +59,7 @@ Deberías ver 3 contenedores corriendo:
 - **Credit Application**: http://localhost:8080/actuator/health
 - **Risk Central**: http://localhost:8081/actuator/health
 
-## 🔐 Autenticación
+##  Autenticación
 
 ### Registrar Usuario
 ```bash
@@ -87,7 +87,7 @@ Content-Type: application/json
 
 **Respuesta:** Token JWT para usar en las demás peticiones
 
-## 📊 Ejemplos de Uso
+##  Ejemplos de Uso
 
 ### Crear Afiliado
 ```bash
@@ -134,14 +134,14 @@ Content-Type: application/json
 }
 ```
 
-## 🗃️ Base de Datos
+##  Base de Datos
 
 Las migraciones de Flyway se ejecutan automáticamente al iniciar:
 - `V1__create_schema.sql` - Creación de tablas
 - `V2__create_indexes.sql` - Índices para optimización
 - `V3__insert_initial_data.sql` - Datos iniciales
 
-## 🛠️ Desarrollo
+##  Desarrollo
 
 ### Reconstruir un servicio específico
 ```bash
@@ -165,7 +165,7 @@ docker-compose down
 docker-compose down -v
 ```
 
-## 📝 Variables de Entorno
+##  Variables de Entorno
 
 Las variables se configuran en `docker-compose.yml`:
 
@@ -176,14 +176,14 @@ Las variables se configuran en `docker-compose.yml`:
 - `DATABASE_PASSWORD=postgres`
 - `RISK_CENTRAL_URL=http://risk-central:8081`
 
-## 🏛️ Arquitectura Hexagonal
+##  Arquitectura Hexagonal
 
 El proyecto sigue Clean Architecture con:
 - **Domain**: Modelos de negocio y casos de uso
 - **Application**: Servicios de aplicación y DTOs
 - **Infrastructure**: Adaptadores (REST, JPA, etc.)
 
-## 🧪 Testing
+##  Testing
 
 Ejecutar tests:
 ```bash
@@ -191,18 +191,3 @@ cd credit-application
 mvn test
 ```
 
-## 📄 Licencia
-
-Este proyecto es parte de un sistema educativo/demostrativo.
-
-## 👥 Autor
-
-**yxdth3** - [GitHub](https://github.com/yxdth3)
-
-## 🤝 Contribuciones
-
-Las contribuciones son bienvenidas. Por favor, abre un issue primero para discutir los cambios propuestos.
-
----
-
-**Estado del Proyecto**: ✅ Funcional y desplegable con Docker
