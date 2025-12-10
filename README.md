@@ -55,9 +55,6 @@ Deberías ver 3 contenedores corriendo:
 - **Credit Application**: http://localhost:8080/swagger-ui.html
 - **Risk Central**: http://localhost:8081/swagger-ui.html
 
-### Health Checks
-- **Credit Application**: http://localhost:8080/actuator/health
-- **Risk Central**: http://localhost:8081/actuator/health
 
 ##  Autenticación
 
