@@ -122,7 +122,7 @@ Maven
 ## Quick start
 1. Clone the repo:
    ```
-   git clone https://github.com/YOUR_USERNAME/coopcredit-system.git
+   git clone https://github.com/yxdth3/coopcredit-system.git
    cd coopcredit-system
    ```
 3. Start services:
