@@ -121,15 +121,21 @@ Maven
 
 ## Quick start
 1. Clone the repo:
-   git clone https://github.com/YOUR_USERNAME/coopcredit-system.git
+   ```
+   git clone https://github.com/yxdth3/CoopCredit
    cd coopcredit-system
-2. Start services:
+   ```
+3. Start services:
+   ```
    chmod +x start.sh
    ./start.sh
-3. Access:
-   *API: http://localhost:8080
-   *Risk Central: http://localhost:8081
-   *Health: http://localhost:8080/actuator/health
+   ```
+5. Access:
+   ```
+   API: http://localhost:8080
+   Risk Central: http://localhost:8081
+   Health: http://localhost:8080/actuator/health
+   ```
 
 ## API Documentation
 
