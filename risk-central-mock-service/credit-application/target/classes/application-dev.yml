@@ -1,0 +1,10 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5432/coopcredit_db
+    username: postgres
+    password: postgres
+
+logging:
+  level:
+    com.coopcredit: DEBUG
+    org.springframework.security: DEBUG
