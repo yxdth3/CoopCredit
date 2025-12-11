@@ -1,9 +1,9 @@
 -- Insert default users
 -- Password is 'admin123' encrypted with BCrypt
 INSERT INTO users (username, password, email, enabled) VALUES
-                                                           ('admin', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'admin@coopcredit.com', true),
-                                                           ('analyst', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'analyst@coopcredit.com', true),
-                                                           ('affiliate', '$2a$10$N9qo8uLOickgx2ZMRZoMyeIjZAgcfl7p92ldGxad68LJZdL17lhWy', 'affiliate@coopcredit.com', true);
+                                                           ('admin', '$2a$10$F5yYbi7QM5Q1TBxJEYUGQ.6D/GZCyaDJdUuTIUl2SLEIILKvvc0Dy', 'admin@coopcredit.com', true),
+                                                           ('analyst', '$2a$10$OBkFSSK9qy6sP/SNqF6qzOjBrt.XKLl6jVGunasBbw8xhd5gMoCR6', 'analyst@coopcredit.com', true),
+                                                           ('affiliate', '$2a$10$N5gq/10BftbUMXf1uWY0m.bkisA7JoLe0.vZ07TlHPfG04g.pi83C', 'affiliate@coopcredit.com', true);
 
 -- Insert roles
 INSERT INTO user_roles (user_id, role) VALUES
